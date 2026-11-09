@@ -130,6 +130,17 @@ p { margin: 0 0 14px; max-width: 66ch; }
 .proj .meta { font-family: var(--f-mono); font-size: 0.74rem; color: var(--muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
 .proj p { margin: 0; font-size: 0.95rem; }
 
+/* Publications */
+.pubs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.pub { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 20px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.pub .yr { font-family: var(--f-mono); font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 2px; }
+.pub .t { font-weight: 600; line-height: 1.4; }
+.pub .a { font-size: 0.9rem; color: var(--muted); margin-top: 2px; }
+.pub .v { font-family: var(--f-mono); font-size: 0.78rem; color: var(--accent); margin-top: 4px; }
+.pub .v a { margin-left: 10px; }
+.more { margin-top: 18px; font-size: 0.92rem; }
+@media (max-width: 480px) { .pub { grid-template-columns: minmax(0, 1fr); } }
+
 /* People */
 .lead-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; padding-bottom: 24px; margin-bottom: 8px; border-bottom: 1px solid var(--rule); }
 .lead-card .name { font-family: var(--f-display); font-size: var(--step-1); }
@@ -163,6 +174,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 64px; }
       <a href="#about">About</a>
       <a href="#research">Research</a>
       <a href="#projects">Projects</a>
+      <a href="#publications">Publications</a>
       <a href="#people">People</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -194,7 +206,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 64px; }
         <p>Our method is Bayesian at heart. We design models whose uncertainty is part of the answer, and we build the inference algorithms that make them scale to modern data and modern hardware.</p>
         <ul class="facts">
           <li><span class="k">Founded</span>2014</li>
-          <li><span class="k">Venues</span>NeurIPS · ICML · ICCV · AAAI · AISTATS</li>
+          <li><span class="k">Venues</span>NeurIPS · ICML · ICCV · AAAI · AISTATS · TMLR</li>
           <li><span class="k">Compute</span>4 × NVIDIA H100</li>
           <li><span class="k">Funding</span>Horizon Europe · MSCA</li>
         </ul>
@@ -245,6 +257,27 @@ html { scroll-behavior: smooth; scroll-padding-top: 64px; }
             <p>Circular power-electronics converter design. The lab hosts a doctoral candidate working on world models for power-module health monitoring and lifetime estimation.</p>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="publications">
+    <div class="wrap">
+      <div class="label">Publications</div>
+      <div>
+        <h2>Selected papers.</h2>
+        <ol class="pubs">
+          <li class="pub"><span class="yr">2026</span><div><div class="t">HeavyBridge: Tempered Lévy Bridges for Anchored Diffusion Driving Policies</div><div class="a">S. Chatzis, L. Papadoulas</div><div class="v">TMLR<a href="https://openreview.net/forum?id=5p1S532fXM">OpenReview</a><a href="https://github.com/soteri0s/heavybridge">Code</a></div></div></li>
+          <li class="pub"><span class="yr">2023</span><div><div class="t">DISCOVER: Making Vision Networks Interpretable via Competition and Dissection</div><div class="a">K. P. Panousis, S. Chatzis</div><div class="v">NeurIPS</div></div></li>
+          <li class="pub"><span class="yr">2023</span><div><div class="t">A New Dataset for End-to-End Sign Language Translation: The Greek Elementary School Dataset</div><div class="a">A. Voskou, K. P. Panousis, H. Partaourides, K. Tolias, S. Chatzis</div><div class="v">ICCV</div></div></li>
+          <li class="pub"><span class="yr">2022</span><div><div class="t">Stochastic Deep Networks with Linear Competing Units for Model-Agnostic Meta-Learning</div><div class="a">K. Kalais, S. Chatzis</div><div class="v">ICML</div></div></li>
+          <li class="pub"><span class="yr">2022</span><div><div class="t">Competing Mutual Information Constraints with Stochastic Competition-Based Activations for Learning Diversified Representations</div><div class="a">K. P. Panousis, A. Antoniadis, S. Chatzis</div><div class="v">AAAI</div></div></li>
+          <li class="pub"><span class="yr">2021</span><div><div class="t">Stochastic Transformer Networks with Linear Competing Units: Application to End-to-End SL Translation</div><div class="a">A. Voskou, K. P. Panousis, D. Kosmopoulos, D. N. Metaxas, S. Chatzis</div><div class="v">ICCV</div></div></li>
+          <li class="pub"><span class="yr">2021</span><div><div class="t">Local Competition and Stochasticity for Adversarial Robustness in Deep Learning</div><div class="a">K. P. Panousis, S. Chatzis, A. Alexos, S. Theodoridis</div><div class="v">AISTATS</div></div></li>
+          <li class="pub"><span class="yr">2019</span><div><div class="t">Nonparametric Bayesian Deep Networks with Local Competition</div><div class="a">K. P. Panousis, S. Chatzis, S. Theodoridis</div><div class="v">ICML</div></div></li>
+          <li class="pub"><span class="yr">2013</span><div><div class="t">The Infinite-Order Conditional Random Field Model for Sequential Data Modeling</div><div class="a">S. P. Chatzis, Y. Demiris</div><div class="v">IEEE TPAMI</div></div></li>
+        </ol>
+        <p class="more muted">Full list on <a href="https://orcid.org/0000-0002-4956-4013">ORCID</a>.</p>
       </div>
     </div>
   </section>
