@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>GenML Laboratory</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="GenML Laboratory, Cyprus University of Technology: generative machine learning, Bayesian deep learning and stochastic inference.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a reverse-diffusion hero (noise resolving into the lab's name), then a single 1100px column of
+   ruled sections; label column on the left at desktop width, stacked on phones. */
+:root {
+  --paper: #f5f6f9;
+  --surface: #ffffff;
+  --ink: #12162b;
+  --muted: #565d78;
+  --rule: #d9dce8;
+  --accent: #2b3fd0;
+  --accent-soft: #e6e9fb;
+  --dot: #2b3fd0;
+  --dot-faint: #9aa3d8;
+  --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --f-body: "Public Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: clamp(2.4rem, 6vw, 4.6rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0c0f1e; --surface: #141830; --ink: #e7e9f5; --muted: #a2a8c6; --rule: #262b48;
+    --accent: #93a0ff; --accent-soft: #1c2246; --dot: #a9b3ff; --dot-faint: #4a5390; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0c0f1e; --surface: #141830; --ink: #e7e9f5; --muted: #a2a8c6; --rule: #262b48;
+  --accent: #93a0ff; --accent-soft: #1c2246; --dot: #a9b3ff; --dot-faint: #4a5390; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--f-body); font-size: var(--step-0); line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+.wrap {
+  max-width: 1100px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Header */
+.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule);
+}
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.brand { font-family: var(--f-mono); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.02em; color: var(--ink); text-decoration: none; }
+.brand span { color: var(--accent); }
+.top nav { display: flex; gap: 20px; flex-wrap: wrap; }
+.top nav a { color: var(--muted); text-decoration: none; font-size: 0.88rem; }
+.top nav a:hover { color: var(--ink); }
+@media (max-width: 640px) { .top nav { display: none; } }
+
+/* Hero */
+.hero .wrap { padding-block: 56px 24px; display: grid; gap: 28px; }
+.eyebrow { font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+h1 {
+  font-family: var(--f-display); font-weight: 400; font-size: var(--step-3);
+  line-height: 1.04; letter-spacing: -0.015em; margin: 0; max-width: 16ch; text-wrap: balance;
+}
+h1 em { font-style: italic; color: var(--accent); }
+.lede { font-size: var(--step-1); line-height: 1.5; color: var(--muted); max-width: 58ch; margin: 0; }
+
+.field {
+  position: relative; border: 1px solid var(--rule); background: var(--surface);
+  border-radius: 4px; overflow: hidden;
+}
+.field canvas { display: block; width: 100%; height: clamp(180px, 30vw, 320px); }
+.field .readout {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  border-top: 1px solid var(--rule); padding: 8px 14px;
+  font-family: var(--f-mono); font-size: 0.76rem; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.readout b { color: var(--ink); font-weight: 500; }
+.readout button {
+  font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer;
+}
+
+/* Sections */
+section.block { border-top: 1px solid var(--rule); }
+section.block > .wrap { padding-block: 56px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 32px; }
+@media (max-width: 760px) { section.block > .wrap { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-block: 44px; } }
+.label { font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 6px; }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: var(--step-2); line-height: 1.2; margin: 0 0 16px; text-wrap: balance; max-width: 30ch; }
+h3 { font-family: var(--f-body); font-weight: 600; font-size: 1.02rem; margin: 0 0 6px; }
+p { margin: 0 0 14px; max-width: 66ch; }
+.muted { color: var(--muted); }
+
+.facts { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 20px 0 0; padding: 0; list-style: none; font-size: 0.92rem; }
+.facts li { display: flex; flex-direction: column; }
+.facts .k { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+/* Research grid */
+.themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0; border-top: 1px solid var(--rule); }
+.theme { padding: 20px 20px 20px 0; border-bottom: 1px solid var(--rule); min-width: 0; }
+.theme .sym { font-family: var(--f-mono); font-size: 0.8rem; color: var(--accent); margin-bottom: 8px; display: block; }
+.theme p { font-size: 0.94rem; color: var(--muted); margin: 0; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; padding: 0; list-style: none; }
+.chips li { font-size: 0.85rem; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--ink); }
+
+/* Projects */
+.projects { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.proj { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 8px 24px; padding: 20px 0; border-bottom: 1px solid var(--rule); }
+@media (max-width: 560px) { .proj { grid-template-columns: minmax(0, 1fr); } }
+.proj .code { font-family: var(--f-mono); font-weight: 500; font-size: 0.95rem; }
+.proj .meta { font-family: var(--f-mono); font-size: 0.74rem; color: var(--muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.proj p { margin: 0; font-size: 0.95rem; }
+
+/* People */
+.lead-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; padding-bottom: 24px; margin-bottom: 8px; border-bottom: 1px solid var(--rule); }
+.lead-card .name { font-family: var(--f-display); font-size: var(--step-1); }
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px 28px; margin-top: 16px; }
+.person .name { font-weight: 600; }
+.person .role { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.person p { font-size: 0.92rem; color: var(--muted); margin: 4px 0 0; }
+
+.join { margin-top: 28px; padding: 18px 20px; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; }
+.join p { margin: 0; }
+
+/* Contact */
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px 28px; }
+.contact-grid .k { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
+.copy { font: inherit; font-size: 0.8rem; margin-left: 8px; color: var(--accent); background: none; border: 1px solid var(--rule); border-radius: 3px; padding: 1px 8px; cursor: pointer; }
+.addr { user-select: all; }
+
+footer { border-top: 1px solid var(--rule); }
+footer .wrap { padding-block: 28px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">GenML<span>·</span>CUT</a>
+    <nav aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#projects">Projects</a>
+      <a href="#people">People</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Cyprus University of Technology · Limassol</p>
+      <h1>Generative models, built on <em>probability</em>.</h1>
+      <p class="lede">The GenML Laboratory studies how machines learn to generate data and how they can say how sure they are. We work on diffusion and flow models, Bayesian deep learning and stochastic inference, and we take them to autonomous driving, video and language.</p>
+      <figure class="field" aria-label="Animation of a diffusion model turning Gaussian noise into the word GenML">
+        <canvas id="diffusion"></canvas>
+        <figcaption class="readout">
+          <span>reverse diffusion &nbsp; x<sub>t</sub> = α<sub>t</sub>x<sub>0</sub> + σ<sub>t</sub>ε</span>
+          <span>t = <b id="tval">0.000</b> &nbsp; <button type="button" id="toggle">Pause</button></span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="label">About</div>
+      <div>
+        <h2>Twelve years of statistical machine learning in Cyprus.</h2>
+        <p>The lab was founded in 2014 as the Statistical Machine Learning Research Laboratory and is now the GenML Laboratory. It sits in the Department of Electrical Engineering and Computer Science and Engineering at the Cyprus University of Technology.</p>
+        <p>Our method is Bayesian at heart. We design models whose uncertainty is part of the answer, and we build the inference algorithms that make them scale to modern data and modern hardware.</p>
+        <ul class="facts">
+          <li><span class="k">Founded</span>2014</li>
+          <li><span class="k">Venues</span>NeurIPS · ICML · ICCV · AAAI · AISTATS</li>
+          <li><span class="k">Compute</span>4 × NVIDIA H100</li>
+          <li><span class="k">Funding</span>Horizon Europe · MSCA</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="research">
+    <div class="wrap">
+      <div class="label">Research</div>
+      <div>
+        <h2>Six lines of work that share one toolkit.</h2>
+        <div class="themes">
+          <div class="theme"><span class="sym">p(x)</span><h3>Scalable generative modelling</h3><p>Diffusion, flow matching and few-step generators for images, video and trajectories.</p></div>
+          <div class="theme"><span class="sym">p(θ | D)</span><h3>Bayesian deep learning</h3><p>Priors, posteriors and nonparametric models that make deep networks report what they do not know.</p></div>
+          <div class="theme"><span class="sym">dX = ∇log p dt + √2 dW</span><h3>MCMC and Langevin inference</h3><p>Sampling algorithms for posterior inference and for steering pretrained generators at test time.</p></div>
+          <div class="theme"><span class="sym">softmax(QKᵀ)V</span><h3>Stochastic and sparse attention</h3><p>Attention operators with random-measure foundations, built to be efficient and uncertainty-aware.</p></div>
+          <div class="theme"><span class="sym">P(error) ≤ α</span><h3>Trustworthy AI</h3><p>Calibration, faithfulness testing and hallucination detection, backed by statistical guarantees.</p></div>
+          <div class="theme"><span class="sym">π₁ … πₖ</span><h3>Multi-agent LLM systems</h3><p>Orchestration of language-model agents that plan, critique and improve each other.</p></div>
+        </div>
+        <ul class="chips" aria-label="Application areas">
+          <li>Autonomous driving</li><li>Video understanding and generation</li><li>Natural language processing</li><li>Recommendation systems</li><li>Financial inference</li><li>Engineering surrogates</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="label">Projects</div>
+      <div>
+        <h2>European research projects.</h2>
+        <div class="projects">
+          <div class="proj">
+            <div><div class="code">HIDDEN</div><div class="meta">Horizon Europe · GA 101202228</div></div>
+            <p>Human-aligned decision-making for autonomous vehicles. The lab develops a dual architecture that pairs a slow vision-language model with a fast diffusion-based planner, together with work on standards compliance.</p>
+          </div>
+          <div class="proj">
+            <div><div class="code">ACCESS</div><div class="meta">MSCA Staff Exchanges · GA 101129865</div></div>
+            <p>Remote attendance of live-streamed performing arts with a stronger sense of presence: gaze-contingent video super-resolution, an LLM-based virtual companion and a VR virtual foyer.</p>
+          </div>
+          <div class="proj">
+            <div><div class="code">PHAROS-CY</div><div class="meta">Horizon Europe · GA 101263007</div></div>
+            <p>Trustworthy AI infrastructure for Cyprus. The lab contributes the project's AI Registry tooling, built on multi-agent orchestration.</p>
+          </div>
+          <div class="proj">
+            <div><div class="code">CPEC</div><div class="meta">MSCA Doctoral Network · GA 101312322 · from 2027</div></div>
+            <p>Circular power-electronics converter design. The lab hosts a doctoral candidate working on world models for power-module health monitoring and lifetime estimation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="people">
+    <div class="wrap">
+      <div class="label">People</div>
+      <div>
+        <div class="lead-card">
+          <span class="name">Prof. Sotirios Chatzis</span>
+          <span class="muted">Lab Director · Full Professor and Department Chair</span>
+          <p style="margin-top:10px">Twenty years in generative machine learning, with a background in Bayesian statistics from the University of Miami and a former Senior Research Associate post at Imperial College London. Area Chair at ICLR, Senior Program Committee member at AAAI, and member of the National AI Taskforce of the Republic of Cyprus.</p>
+        </div>
+        <div class="people">
+          <div class="person"><div class="name">George Nicolaou</div><div class="role">PhD researcher</div><p>Artist-specific generative models and controllable style.</p></div>
+          <div class="person"><div class="name">Kyriakos Georgiou</div><div class="role">PhD researcher</div><p>Parameter-efficient adapters for video generation.</p></div>
+          <div class="person"><div class="name">Christoforos Lefkiou</div><div class="role">PhD researcher · industrial PhD</div><p>Neural surrogates for ship-hull hydrodynamics, with Dromon Bureau of Shipping.</p></div>
+          <div class="person"><div class="name">Dimitrios Ioannou</div><div class="role">PhD researcher · HIDDEN</div><p>Human-aligned decision-making for autonomous vehicles (Task 4.2).</p></div>
+          <div class="person"><div class="name">George Panaretou</div><div class="role">PhD researcher · HIDDEN</div><p>Collaborative perception for connected autonomous vehicles (Task 3.3).</p></div>
+          <div class="person"><div class="name">Yiannos Vyrides</div><div class="role">PhD researcher</div><p>Agentic AI and the Indian Buffet of Agents (IBoA) framework.</p></div>
+        </div>
+        <div class="join">
+          <p><strong>Join us.</strong> We welcome PhD and MSc applicants with a strong background in probability, statistics or deep learning. Write to the Lab Director with a CV and a short note on the problems that interest you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="wrap">
+      <div class="label">Contact</div>
+      <div class="contact-grid">
+        <div><span class="k">Email</span><span class="addr" id="mail">sotirios.chatzis@cut.ac.cy</span><button class="copy" type="button" id="copyMail">Copy</button></div>
+        <div><span class="k">Address</span>Cyprus University of Technology<br>Limassol, Cyprus</div>
+        <div><span class="k">Online</span>
+          <a href="https://orcid.org/0000-0002-4956-4013">ORCID</a> ·
+          <a href="https://github.com/soteri0s">GitHub</a> ·
+          <a href="https://huggingface.co/soteri0s">Hugging Face</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>GenML Laboratory · Cyprus University of Technology</span>
+    <span>Formerly the Statistical Machine Learning Research Laboratory</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Copy email
+  var btn = document.getElementById('copyMail');
+  btn.addEventListener('click', function () {
+    var text = document.getElementById('mail').textContent;
+    var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); };
+    try {
+      navigator.clipboard.writeText(text).then(done, function () { selectMail(); });
+    } catch (e) { selectMail(); }
+    function selectMail() {
+      var r = document.createRange(); r.selectNodeContents(document.getElementById('mail'));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    }
+  });
+
+  // Reverse-diffusion hero
+  var canvas = document.getElementById('diffusion');
+  var ctx = canvas.getContext('2d');
+  var tOut = document.getElementById('tval');
+  var toggle = document.getElementById('toggle');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var N = 2200, pts = [], W = 0, H = 0, dpr = 1, colors = {};
+  var paused = reduce;
+  if (reduce) toggle.textContent = 'Play';
+
+  function readColors() {
+    var cs = getComputedStyle(document.documentElement);
+    colors.dot = cs.getPropertyValue('--dot').trim();
+    colors.faint = cs.getPropertyValue('--dot-faint').trim();
+    colors.bg = cs.getPropertyValue('--surface').trim();
+  }
+
+  function gauss() {
+    var u = 1 - Math.random(), v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  function sampleTarget() {
+    // Render the word offscreen and sample filled pixels as x0.
+    var oc = document.createElement('canvas');
+    oc.width = W; oc.height = H;
+    var o = oc.getContext('2d');
+    var size = Math.min(H * 0.78, W / 3.4);
+    o.font = '500 ' + size + 'px Newsreader, Georgia, serif';
+    o.textAlign = 'center'; o.textBaseline = 'middle';
+    o.fillStyle = '#000';
+    o.fillText('GenML', W / 2, H / 2 + size * 0.04);
+    var data = o.getImageData(0, 0, W, H).data, filled = [];
+    var step = Math.max(2, Math.round(Math.sqrt((W * H) / 60000)));
+    for (var y = 0; y < H; y += step) for (var x = 0; x < W; x += step) {
+      if (data[(y * W + x) * 4 + 3] > 128) filled.push([x, y]);
+    }
+    pts = [];
+    for (var i = 0; i < N; i++) {
+      var f = filled.length ? filled[(Math.random() * filled.length) | 0] : [W / 2, H / 2];
+      pts.push({ x0: f[0] + (Math.random() - 0.5) * step, y0: f[1] + (Math.random() - 0.5) * step, ex: gauss(), ey: gauss() });
+    }
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var r = canvas.getBoundingClientRect();
+    W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    sampleTarget();
+  }
+
+  // Cosine schedule: alpha_t = cos(pi t / 2), sigma_t = sin(pi t / 2)
+  function draw(t) {
+    var a = Math.cos(Math.PI * t / 2), s = Math.sin(Math.PI * t / 2);
+    var cx = W / 2, cy = H / 2, sx = W * 0.2, sy = H * 0.28;
+    ctx.fillStyle = colors.bg; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = t > 0.35 ? colors.faint : colors.dot;
+    var r = W < 500 ? 1.1 : 1.4;
+    for (var i = 0; i < pts.length; i++) {
+      var p = pts[i];
+      var x = a * p.x0 + (1 - a) * cx + s * p.ex * sx;
+      var y = a * p.y0 + (1 - a) * cy + s * p.ey * sy;
+      ctx.fillRect(x - r, y - r, r * 2, r * 2);
+    }
+    tOut.textContent = t.toFixed(3);
+  }
+
+  // Loop: denoise 1 -> 0 (4s), hold (2.6s), re-noise 0 -> 1 (1.6s), hold noise (0.8s)
+  var D1 = 4000, H1 = 2600, D2 = 1600, H2 = 800, T = D1 + H1 + D2 + H2;
+  var start = performance.now(), offset = 0, pausedAt = 0;
+  function tAt(ms) {
+    var m = ms % T;
+    if (m < D1) { var u = m / D1; return 1 - (u * u * (3 - 2 * u)); }
+    if (m < D1 + H1) return 0;
+    if (m < D1 + H1 + D2) { var v = (m - D1 - H1) / D2; return v * v; }
+    return 1;
+  }
+  function frame(now) {
+    if (!paused) draw(tAt(now - start));
+    requestAnimationFrame(frame);
+  }
+
+  toggle.addEventListener('click', function () {
+    paused = !paused;
+    toggle.textContent = paused ? 'Play' : 'Pause';
+    if (paused) pausedAt = performance.now();
+    else if (reduce && pausedAt === 0) start = performance.now() - D1; // first play from rest: start at clean data hold
+    else start += performance.now() - pausedAt;
+  });
+
+  function redrawStatic() { if (paused) draw(reduce && pausedAt === 0 ? 0 : tAt(pausedAt - start)); }
+
+  readColors();
+  var ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+  ready.then(function () {
+    resize();
+    draw(0);
+    if (!reduce) start = performance.now() - (D1 + H1 - 400); // open on the clean word, then cycle
+    requestAnimationFrame(frame);
+  });
+
+  var rt;
+  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { resize(); redrawStatic(); }, 150); });
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  var onTheme = function () { readColors(); redrawStatic(); };
+  if (mq.addEventListener) mq.addEventListener('change', onTheme);
+  new MutationObserver(onTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>
+</body>
+</html>
